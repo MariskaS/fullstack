@@ -1,0 +1,64 @@
+<div class="page-title">
+  <h4>
+    <a routerLink="/categories">Categories</a>
+    <i class="material-icons">keyboard_arrow_right</i>
+    {{isNew ? 'Add' : 'Edit'}} category
+  </h4>
+  <button class="btn btn-small red"
+          *ngIf="!isNew"
+          (click)="deleteCategory()">
+    <i class="material-icons">delete</i>
+  </button>
+</div>
+
+<div class="row">
+  <form [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        class="col s12 l6">
+    <div class="input-field">
+      <input id="name"
+             type="text"
+             formControlName="name"
+             [ngClass]="{'invalid': form.get('name').invalid && form.get('name').touched}">
+      <label for="name">Название</label>
+      <span *ngIf="form.get('name').invalid && form.get('name').touched"
+            class="helper-text red-text">
+        <ng-container *ngIf="form.get('name').errors['required']">
+          The category name must not be empty.
+        </ng-container>
+      </span>
+    </div>
+
+    <div>
+      <input type="file"
+             #input
+             (change)="onFileUpload($event)"
+             class="fs-none">
+      <button type="button"
+              (click)="triggerClick()"
+              [disabled]="form.disabled"
+              class="waves-effect waves-light btn orange lighten-2 mb2">
+        <i class="material-icons left">backup</i>
+        Upload image
+      </button>
+    </div>
+
+    <div>
+      <button type="submit"
+              [disabled]="form.invalid || form.disabled"
+              class="waves-effect waves-light btn">
+        Save changes
+      </button>
+    </div>
+  </form>
+
+  <div class="col s12 l4 center">
+    <img class="fs-image-preview responsive-img"
+         [src]="imagePreview"
+         *ngIf="imagePreview">
+  </div>
+</div>
+
+<app-positions-form *ngIf="category?._id"
+                    [categoryId]="category._id"></app-positions-form>
+
